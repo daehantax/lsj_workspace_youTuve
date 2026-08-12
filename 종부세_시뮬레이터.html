@@ -153,6 +153,16 @@ th:first-child,td:first-child{text-align:left;color:var(--ink-2)}
 td{color:var(--ink)}
 td.dim{color:var(--ink-3)}
 tr.total td{font-weight:900;border-top:2px solid var(--line);color:var(--gold)}
+/* 줄바꿈 텍스트 테이블(오해 vs 진실) */
+.tbl-text table{min-width:780px}
+.tbl-text th,.tbl-text td{white-space:normal;text-align:left;vertical-align:top;line-height:1.55;font-variant-numeric:normal}
+.tbl-text td:first-child{font-weight:800;color:var(--ink);min-width:120px}
+.tbl-text td b{color:var(--gold)}
+th.myth{color:var(--bad)}
+th.truth{color:var(--good)}
+td.myth-c{color:var(--ink-2)}
+td.myth-c::before{content:"✕ ";color:var(--bad);font-weight:800}
+td.truth-c::before{content:"✓ ";color:var(--good);font-weight:800}
 .notegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-top:12px}
 .note{background:var(--ground);border:1px solid var(--line);border-radius:10px;padding:12px 15px}
 .note b{display:block;color:var(--ink);font-size:.87rem;margin-bottom:4px}
@@ -291,9 +301,9 @@ ul.plain li::before{content:"";position:absolute;left:0;top:.55em;width:6px;heig
     </div>
 
     <div class="critstrip" id="critstrip">
-      <b>비판 포인트</b> — 개편안은 ‘주택 수’에서 <b>‘가액＋실거주’</b> 기준으로 전환되지만, 인별과세가 유지된
-      <b>부부 공동명의</b>는 실거주 1주택 혜택에서 구조적으로 배제될 수 있습니다. 특히 <b>비거주 공동명의</b>(공제 18억→8억)와
-      <b>특례 미신청 고령·장기보유자</b>(세액공제 전액 배제)가 가장 크게 악화됩니다. ▼ 아래 더보기에서 7가지 쟁점 확인
+      <b>비판 포인트</b> — "공동명의는 무조건 다주택자 취급"이라는 세평은 <b>오해</b>지만(매년 특례 선택 가능),
+      <b>비거주 공동명의</b>는 공제가 18억→8억으로 급감해 비거주 <b>단독명의(9억)보다도 적어지는 역전 현상</b>이 실재합니다.
+      정부도 반박하지 못하고 비거주 예외요건 확대를 검토 중. ▼ 아래 더보기: 오해 vs 진실 · 정부도 인정한 문제점
     </div>
   </section>
 
@@ -327,18 +337,64 @@ ul.plain li::before{content:"";position:absolute;left:0;top:.55em;width:6px;heig
     </details>
 
     <details>
-      <summary><span class="ico">⚠️</span>비판적 쟁점 — 공동명의는 왜 불리해지나 (7가지)<span class="arrow">▼</span></summary>
+      <summary><span class="ico">⚖️</span>비판적 쟁점 — 오해 vs 진실, 그리고 남는 문제<span class="arrow">▼</span></summary>
       <div class="body">
-        <div class="notegrid">
-          <div class="note"><b><span class="tag worse">최대 악화</span>① 비거주 공동명의</b><p>부부 합산 기본공제 18억 → <b style="color:var(--bad)">8억</b>으로 축소. 세컨하우스·주재원 발령 등 직격탄. 전입신고·실거주기간 판정 필요.</p></div>
-          <div class="note"><b><span class="tag worse">악화</span>② 공정시장가액비율 80%</b><p>특례 미신청 공동명의(조정지역)는 '28년부터 3주택자와 같은 80% 적용 → 과세표준 자체가 확대.</p></div>
-          <div class="note"><b><span class="tag worse">악화</span>③ 세액공제 원천 배제</b><p>고령자·장기공제(최대 80%)는 특례 신청자만. 개별과세 선택 시 전액 배제 — 고령·장기보유 부부일수록 손해.</p></div>
-          <div class="note"><b><span class="tag worse">악화</span>④ 특례도 비거주면 축소</b><p>특례 선택 시에도 비거주는 12억→9억. "비거주"가 붙으면 어느 쪽을 택해도 종전보다 불리.</p></div>
-          <div class="note"><b><span class="tag info">주의</span>⑤ 거주기간 중심 재편</b><p>공제가 보유기간→거주기간 중심으로. 오래 보유했지만 실거주가 짧으면 공제 축소.</p></div>
-          <div class="note"><b><span class="tag info">주의</span>⑥ 초고가 공동명의</b><p>인별 분산으로 낮은 세율구간을 적용받던 절세효과가 비율 인상·고가구간 세율 강화로 상쇄·역전 가능.</p></div>
-          <div class="note"><b><span class="tag info">주의</span>⑦ 세부담 상한 150→200%</b><p>연도별 급증 시 완충장치 약화 — 상한 200%까지는 그대로 부과.</p></div>
-        </div>
-        <p style="margin-top:12px;font-size:.85rem"><b style="color:var(--gold)">실무 포인트</b> — 공동명의 vs 특례는 <b>매년 선택 가능</b>(특례 신청: 매년 9.16~9.30). 지분율·연령·거주기간·공시가격을 종합해 개별 시뮬레이션이 필요합니다.</p>
+
+        <h4 style="margin:16px 0 2px;color:var(--ink);font-size:.95rem">① 부부 공동명의 종부세 — 오해(세평) vs 진실(정부 설명)</h4>
+        <div class="tblwrap tbl-text"><table>
+          <tr><th>항목</th><th class="myth">세간의 오해</th><th class="truth">정부 설명</th></tr>
+          <tr><td>과세방식</td>
+            <td class="myth-c">공동명의 1주택자는 무조건 다주택자(3주택자)로 과세된다</td>
+            <td class="truth-c">종부세는 원래부터 <b>인별합산 과세가 원칙</b>. 2021년 도입된 '1세대1주택자 특례'를 매년 선택할 수 있어 자동으로 다주택자 취급되는 게 아님</td></tr>
+          <tr><td>유불리 방향</td>
+            <td class="myth-c">공동명의는 이번 개편으로 무조건 손해다</td>
+            <td class="truth-c"><b>실거주 공동명의는 오히려 유리</b> — 개별과세 선택 시 부부 각 9억(총 18억) 공제로 특례(14억)보다 큼. 손해는 <b>비거주 공동명의</b>에 한정</td></tr>
+          <tr><td>공정시장<br>가액비율</td>
+            <td class="myth-c">공동명의는 전부 80% 비율(3주택자와 동일)이 적용된다</td>
+            <td class="truth-c">특례를 신청하면 70% 적용. <b>80%는 특례를 신청하지 않은(개별과세로 남은) 경우에만</b> 적용</td></tr>
+          <tr><td>세율표</td>
+            <td class="myth-c">공동명의는 3주택자 세율표를 그대로 적용받아 불이익</td>
+            <td class="truth-c">2028년부터 <b>세율 자체가 주택 수와 무관하게 가액 기준으로 일원화</b> — 3주택 중과 세율표가 사라져 모두 동일 세율표 적용(공동명의 차별이 아님)</td></tr>
+          <tr><td>선택의 자유</td>
+            <td class="myth-c">정부가 일방적으로 과세방식을 강제한다</td>
+            <td class="truth-c">납세자가 매년 인별과세와 특례 중 <b>유리한 쪽을 선택</b> 가능(9.16~9.30 신청)</td></tr>
+          <tr><td>이혼 유발 논란</td>
+            <td class="myth-c">"이혼해야 세금이 줄어든다"(이혼장려세)</td>
+            <td class="truth-c">정부는 인별과세가 유리한 경우(거주 시 18억 공제)를 들어 이혼 유인을 부인. 다만 야당(나경원 의원 등)은 "이혼장려세" 비판 지속</td></tr>
+          <tr><td>지분율</td>
+            <td class="myth-c">반반이면 지분과 무관하게 무조건 공제 2배</td>
+            <td class="truth-c">지분율에 따라 공시가격·과세표준이 <b>안분</b>되며, 지분이 불균등하면 계산이 달라짐</td></tr>
+        </table></div>
+
+        <h4 style="margin:22px 0 2px;color:var(--ink);font-size:.95rem">② 정부도 사실상 인정한 불리한 점</h4>
+        <div class="tblwrap tbl-text"><table>
+          <tr><th>문제점</th><th>구체적 내용</th><th>정부 측 반응 / 근거</th></tr>
+          <tr><td>비거주 공동명의 공제,<br>단독명의보다 낮음</td>
+            <td>비거주 단독 1주택자 공제 9억 vs 비거주 공동명의(부부 합산) <b>8억</b> — 공동명의가 단독보다 1억 더 적은 <b>역전 현상</b></td>
+            <td>언론 지적에 구윤철 부총리가 "일률적으로 늘어나는 건 아니다" 취지로만 해명 — <b>핵심 반박은 하지 못함</b></td></tr>
+          <tr><td>공제 급감 폭</td>
+            <td>현행 18억(각 9억) → 개편 후 8억(각 4억), <b>10억 감소</b></td>
+            <td>기재부 스스로 산식(4억+5억×거주비중)을 발표 — 거주비중 0이면 4억만 남는다는 점을 공식 인정</td></tr>
+          <tr><td>제도 복잡성</td>
+            <td>주택가격·지분율·연령·보유기간·거주여부·공정시장가액비율을 모두 따져 <b>매년 재계산</b> 필요</td>
+            <td>부총리도 "유리한 방식을 선택할 수 있다"고만 답변 — 복잡성 자체는 부정 못함. 박훈 교수(서울시립대) 등 "일반인은 이해조차 어렵다" 지적</td></tr>
+          <tr><td>입법예고 중 다량 반대</td>
+            <td>입법예고(8.4~8.20) 기간 중 8.8 기준 <b>2,057건</b> 의견 접수, 대부분 부담 증가 반대</td>
+            <td>기재부가 <b>"비거주 예외요건" 확대 검토("고심")</b> 중으로 보도 — 제도 미흡함을 사실상 시인</td></tr>
+          <tr><td>부득이한 비거주<br>인정 범위 협소</td>
+            <td>주재원 발령, 세입자 만기 대기 등 불가피한 비거주도 원칙적으로 불리</td>
+            <td>청원 다수가 "부득이한 사유 확대 인정" 요구 → 기재부 검토 중(미확정)</td></tr>
+          <tr><td>제도 미확정</td>
+            <td>국회 심의·의결 전 <b>정부 발표안 단계</b>(정기국회 제출 예정)</td>
+            <td>세율·한도·비율은 법·시행령 개정 과정에서 변경 가능 — 현시점 확정 세액 계산은 리스크 존재</td></tr>
+        </table></div>
+
+        <h4 style="margin:22px 0 0;color:var(--ink);font-size:.95rem">③ 정리</h4>
+        <ul class="plain">
+          <li>공동명의가 다주택자로 "자동" 과세되는 건 아니라는 정부 설명은 <b style="color:var(--good)">문언상 맞음</b>(선택권 존재).</li>
+          <li>다만 <b style="color:var(--bad)">비거주 공동명의</b>는 개편 후 공제액(8억)이 비거주 단독명의(9억)보다도 적어지는 <b style="color:var(--bad)">역전 현상이 실재</b> — 정부도 반박하지 못하고 비거주 예외요건 확대를 검토 중인 사안.</li>
+          <li>실거주 부부는 걱정할 필요가 적고, <b style="color:var(--gold)">비거주(전월세 준 공동명의 1주택)</b> 케이스가 실질적 타겟 — 상담 시 이 구분을 명확히 안내.</li>
+        </ul>
       </div>
     </details>
 
