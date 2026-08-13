@@ -1,0 +1,182 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1세대 1주택 단독명의 종부세 — 2026 세제개편안</title>
+<link rel="stylesheet" href="assets/style.css">
+
+<div class="wrap">
+
+  <nav class="topnav" aria-label="계산기 이동">
+    <a href="index.html">← 계산기 홈</a>
+    <a class="here" href="single.html">단독명의</a>
+    <a href="joint.html">부부 공동명의</a>
+    <a href="property.html">재산세 계산기</a>
+  </nav>
+
+  <!-- 타이틀바 -->
+  <header>
+    <div class="titlebar">
+      <span class="livechip"><span class="dot"></span>2026 세제개편안</span>
+      <span style="color:var(--ink-3);font-size:.8rem;font-weight:700">2026.8.3 발표 · 기획재정부 정부안 기준</span>
+    </div>
+    <h1>1세대 1주택 <b style="color:var(--gold)">단독명의</b> 종부세, <span class="thin">얼마나 달라지나</span></h1>
+    <p class="sub">거주·비거주 — <b>2026(현행) · 2027 · 2028</b> 3개년 비교 시뮬레이터</p>
+  </header>
+
+  <!-- 입력 -->
+  <section class="panel" aria-label="계산 조건 입력">
+    <h2>계산 조건</h2>
+    <div class="controls">
+
+      <div class="ctl" style="grid-column:1/-1;max-width:560px">
+        <label>주택 공시가격 <small>(시가의 약 70% 가정)</small></label>
+        <div class="numrow">
+          <input type="range" id="inPrice" min="8" max="140" step="0.5" value="20" aria-label="공시가격(억원)">
+          <span class="val" id="priceVal">20억</span>
+        </div>
+        <div class="chips" id="pricePresets">
+          <button class="chip" data-v="15">15억 <small>(시가 20억)</small></button>
+          <button class="chip on" data-v="20">20억 <small>(시가 30억)</small></button>
+          <button class="chip" data-v="30">30억 <small>(시가 45억)</small></button>
+          <button class="chip" data-v="35">35억 <small>(시가 50억)</small></button>
+          <button class="chip" data-v="50">50억 <small>(시가 70억)</small></button>
+          <button class="chip" data-v="70">70억 <small>(시가 100억)</small></button>
+          <button class="chip" data-v="105">105억 <small>(시가 150억)</small></button>
+          <button class="chip" data-v="140">140억 <small>(시가 200억)</small></button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>거주 여부 <small>(해당 주택 실거주)</small></label>
+        <div class="seg" id="segLive" role="group">
+          <button data-v="live" aria-pressed="true">거주</button>
+          <button data-v="nolive" aria-pressed="false">비거주</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>조정대상지역 여부</label>
+        <div class="seg" id="segAdj" role="group">
+          <button data-v="y" aria-pressed="true">조정대상지역</button>
+          <button data-v="n" aria-pressed="false">그 외 지역</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>연령 <small>(납세의무자)</small></label>
+        <div class="stepper">
+          <button id="ageDn" aria-label="연령 감소">−</button>
+          <span class="val" id="ageVal">65세</span>
+          <button id="ageUp" aria-label="연령 증가">＋</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>보유기간</label>
+        <div class="stepper">
+          <button id="holdDn" aria-label="보유기간 감소">−</button>
+          <span class="val" id="holdVal">12년</span>
+          <button id="holdUp" aria-label="보유기간 증가">＋</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>거주기간 <small>(누적, 과거 포함)</small></label>
+        <div class="stepper">
+          <button id="resDn" aria-label="거주기간 감소">−</button>
+          <span class="val" id="resVal">12년</span>
+          <button id="resUp" aria-label="거주기간 증가">＋</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="ticker" id="ticker" role="status"></div>
+  </section>
+
+  <!-- 결과 -->
+  <section class="stage" aria-label="계산 결과">
+    <div class="stagehead">
+      <h2 id="resultTitle">연도별 종부세 (농어촌특별세 포함)</h2>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="cap">공시가격 변동 없음 가정</span>
+        <button class="replay" id="btnReplay">↻ 애니메이션 다시 재생</button>
+      </div>
+    </div>
+
+    <div class="years" id="yearCards"></div>
+
+    <div class="chartcard">
+      <div class="chead">
+        <h3>세액 비교 <span style="color:var(--ink-3);font-weight:600;font-size:.8rem">단위: 만원</span></h3>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="chart" id="chart"><div class="grid" id="grid"></div></div>
+      <div class="xlab">
+        <div>2026 <small>현행</small></div>
+        <div>2027 <small>개편 1년차</small></div>
+        <div>2028 <small>개편 완성</small></div>
+      </div>
+    </div>
+
+    <div class="critstrip" id="critstrip">
+      <b>체크 포인트</b> — 단독명의는 거주 시 기본공제가 12억→<b>14억</b>으로 늘지만, <b>비거주</b>는 12억→<b>9억</b>으로 줄고
+      세액공제도 보유기간 중심에서 <b>거주기간 중심</b>으로 재편(금액한도 '27년 800만·'28년~ 600만 신설)됩니다.
+      부부 공동명의와의 비교는 <a href="joint.html" style="color:var(--gold)">공동명의 계산기</a>에서 확인하세요.
+    </div>
+  </section>
+
+  <!-- 더보기 -->
+  <section class="more" aria-label="상세 정보">
+
+    <details id="dCalc">
+      <summary><span class="ico">🧮</span>계산 상세 보기 — 단계별 산출 내역<span class="arrow">▼</span></summary>
+      <div class="body" id="calcBody"></div>
+    </details>
+
+    <details>
+      <summary><span class="ico">📋</span>무엇이 바뀌나 — 제도 변화 한눈에<span class="arrow">▼</span></summary>
+      <div class="body">
+        <div class="tblwrap"><table>
+          <tr><th>구분</th><th>2026 (현행)</th><th>2027</th><th>2028~</th></tr>
+          <tr><td>기본공제 · 단독/특례 (거주)</td><td>12억</td><td>14억</td><td>14억</td></tr>
+          <tr><td>기본공제 · 단독/특례 (비거주)</td><td>12억</td><td>9억</td><td>9억</td></tr>
+          <tr><td>기본공제 · 공동명의 개별과세 (거주)</td><td>각 9억 (합 18억)</td><td>각 9억 (합 18억)</td><td>각 9억 (합 18억)</td></tr>
+          <tr><td>기본공제 · 공동명의 개별과세 (비거주)</td><td>각 9억 (합 18억)</td><td>각 4억 (합 8억)</td><td>각 4억 (합 8억)</td></tr>
+          <tr><td>공정시장가액비율 · 1세대1주택자</td><td>60%</td><td>70%</td><td>70%</td></tr>
+          <tr><td>공정시장가액비율 · 공동명의 개별과세(조정지역)</td><td>60%</td><td>70%</td><td><b style="color:var(--bad)">80%</b> (3주택자와 동일)</td></tr>
+          <tr><td>세율 (과표 6~12억 구간)</td><td>1.0%</td><td>1.3%</td><td>1.3%</td></tr>
+          <tr><td>세율 체계</td><td>주택 수 기준 차등</td><td>중간 단계</td><td>가액 기준 일원화 (0.5~5.0%)</td></tr>
+          <tr><td>세액공제 기간요건</td><td>보유기간</td><td>보유공제 ½ vs 거주공제 중 큰 쪽</td><td>거주기간만</td></tr>
+          <tr><td>세액공제 금액한도</td><td>없음</td><td>800만원</td><td>600만원</td></tr>
+          <tr><td>세부담 상한</td><td>150%</td><td>200%</td><td>200%</td></tr>
+        </table></div>
+        <p style="margin-top:10px;font-size:.8rem;color:var(--ink-3)">※ 공동명의 개별과세 시 기본공제 = 4억 + 5억 × (거주주택 공시가격 ÷ 보유주택 공시가격 합계). 1주택 실거주면 각 9억, 비거주면 각 4억.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="ico">📌</span>가정 및 유의사항<span class="arrow">▼</span></summary>
+      <div class="body">
+        <ul class="plain">
+          <li>2026.8.3 발표 <b>정부안 기준</b>이며 국회 심의 과정에서 세율·한도·시행시기가 변경될 수 있습니다. 공정시장가액비율은 시행령 사항으로 최종 조정 가능성이 있습니다.</li>
+          <li>공시가격은 3개년 동일 가정(정부 별첨 사례와 동일 방식). 실제로는 공시가격 변동에 따라 달라집니다.</li>
+          <li>공제할 재산세액은 「종부세 과세표준 × 재산세 공정시장가액비율(1주택 45%) × 0.4%」 산식으로 계산 — 정부 발표 사례(공시가 15·20·30·35·50억)와 일치함을 검증했습니다.</li>
+          <li>세부담 상한(직전연도 보유세 대비 '27~ 200%)은 연도 연쇄 적용으로 근사 반영. 재산세는 표준세율(1주택 공정시장가액비율 45%) 기준입니다.</li>
+          <li>과세대상 판정: '27년부터 1세대1주택자는 공시가 <b>14억 초과</b>, 그 외(공동명의 개별과세 포함)는 인별 <b>9억 초과</b> 시 과세. 비거주자의 경우 기준액과 기본공제가 달라 경계 부근에서 <b>문턱 효과</b>(초과 즉시 세액 급증)가 발생합니다.</li>
+          <li>취학·근무·질병 등 부득이한 사유의 비거주 기간(최장 3년), 재개발·재건축 공사기간의 ½은 거주기간으로 인정됩니다.</li>
+          <li>농어촌특별세(종부세의 20%) 포함 금액이며, 재산세·지방교육세는 별도입니다.</li>
+        </ul>
+      </div>
+    </details>
+
+  </section>
+
+  <footer class="foot">
+    <b>출처</b> — 기획재정부 「2026년 세제개편안」 보도자료·상세본·문답자료·별첨(2026.8.3) 중 종합부동산세 개편사항(종부세법 §7·8·9·10·15 개정안)<br>
+    본 시뮬레이터는 이해를 돕기 위한 참고용 계산이며, 실제 세액은 개별 사실관계와 확정 법령에 따라 달라질 수 있습니다.
+  </footer>
+
+</div>
+
+<script>window.PAGE_MODE='single';</script>
+<script src="assets/engine.js"></script>
+<script src="assets/sim.js"></script>
