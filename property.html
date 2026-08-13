@@ -1,0 +1,135 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>재산세 계산기 — 주택분 (2026 기준)</title>
+<link rel="stylesheet" href="assets/style.css">
+
+<div class="wrap">
+
+  <nav class="topnav" aria-label="계산기 이동">
+    <a href="index.html">← 계산기 홈</a>
+    <a href="single.html">단독명의</a>
+    <a href="joint.html">부부 공동명의</a>
+    <a class="here" href="property.html">재산세 계산기</a>
+  </nav>
+
+  <header>
+    <div class="titlebar">
+      <span class="livechip"><span class="dot"></span>주택분 재산세</span>
+      <span style="color:var(--ink-3);font-size:.8rem;font-weight:700">지방세법 표준세율 · 1주택 특례세율 반영</span>
+    </div>
+    <h1>재산세 계산기 <span class="thin">— 본세 · 도시지역분 · 지방교육세</span></h1>
+    <p class="sub">종부세 시뮬레이터의 <b>공제할 재산세액 · 세부담 상한</b> 계산과 연계되는 재산세 로직(calcPropertyTax)입니다.</p>
+  </header>
+
+  <!-- 입력 -->
+  <section class="panel" aria-label="계산 조건 입력">
+    <h2>계산 조건</h2>
+    <div class="controls">
+
+      <div class="ctl" style="grid-column:1/-1;max-width:560px">
+        <label>주택 공시가격 <small>(시가의 약 70% 가정)</small></label>
+        <div class="numrow">
+          <input type="range" id="inPrice" min="1" max="100" step="0.5" value="9" aria-label="공시가격(억원)">
+          <span class="val" id="priceVal">9억</span>
+        </div>
+        <div class="chips" id="pricePresets">
+          <button class="chip" data-v="3">3억</button>
+          <button class="chip" data-v="6">6억</button>
+          <button class="chip on" data-v="9">9억</button>
+          <button class="chip" data-v="12">12억</button>
+          <button class="chip" data-v="15">15억</button>
+          <button class="chip" data-v="20">20억</button>
+          <button class="chip" data-v="30">30억</button>
+          <button class="chip" data-v="50">50억</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>보유 형태 <small>(공정시장가액비율·세율 결정)</small></label>
+        <div class="seg" id="segHome" role="group">
+          <button data-v="one" aria-pressed="true">1세대 1주택</button>
+          <button data-v="multi" aria-pressed="false">다주택·일반</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>도시지역분 <small>(도시계획구역 내 주택)</small></label>
+        <div class="seg" id="segUrban" role="group">
+          <button data-v="y" aria-pressed="true">포함</button>
+          <button data-v="n" aria-pressed="false">제외</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="ticker" id="ticker" role="status"></div>
+  </section>
+
+  <!-- 결과 -->
+  <section class="stage" aria-label="계산 결과">
+    <div class="stagehead">
+      <h2>연간 재산세 부담액</h2>
+      <span class="cap" id="rateCap"></span>
+    </div>
+
+    <div class="cards4" id="resultCards"></div>
+
+    <div class="chartcard">
+      <div class="chead"><h3>계산 상세 — 단계별 산출 내역</h3></div>
+      <div class="fxbox" style="margin-top:10px">
+        <b>재산세 본세</b> = 과세표준 × 세율(초과누진) 　·　 <b>과세표준</b> = 공시가격 × 공정시장가액비율<br>
+        <b>도시지역분</b> = 과세표준 × 0.14% 　·　 <b>지방교육세</b> = 재산세 본세 × 20%
+      </div>
+      <div class="tblwrap" id="detailTbl"></div>
+    </div>
+  </section>
+
+  <!-- 더보기 -->
+  <section class="more" aria-label="상세 정보">
+
+    <details>
+      <summary><span class="ico">📋</span>세율표 — 표준세율 vs 1주택 특례세율<span class="arrow">▼</span></summary>
+      <div class="body">
+        <div class="tblwrap"><table>
+          <tr><th>과세표준 구간</th><th>표준세율</th><th>1주택 특례세율 (공시 9억 이하)</th></tr>
+          <tr><td>6,000만원 이하</td><td>0.10%</td><td>0.05%</td></tr>
+          <tr><td>6,000만 ~ 1억 5,000만원</td><td>0.15%</td><td>0.10%</td></tr>
+          <tr><td>1억 5,000만 ~ 3억원</td><td>0.25%</td><td>0.20%</td></tr>
+          <tr><td>3억원 초과</td><td>0.40%</td><td>0.35%</td></tr>
+        </table></div>
+        <p style="margin-top:10px;font-size:.8rem;color:var(--ink-3)">※ 특례세율(각 구간 −0.05%p)은 1세대 1주택자 중 공시가격 9억원 이하 주택에만 적용됩니다. 공정시장가액비율은 1주택 45%, 다주택·일반 60%.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="ico">🔗</span>종부세와의 연계<span class="arrow">▼</span></summary>
+      <div class="body">
+        <ul class="plain">
+          <li>종부세 계산 시 <b>공제할 재산세액</b>은 종부세 과세표준분에 대한 재산세 상당액(과세표준 × 45% × 0.4%)을 실제 재산세액 한도로 차감합니다 — 이 페이지의 본세 로직이 그 한도 계산에 사용됩니다.</li>
+          <li><b>세부담 상한</b>(전년 대비 150→200%)은 재산세 + 종부세 합계 기준으로 판정하므로, 종부세 시뮬레이터의 상한 체인에도 이 재산세 본세가 들어갑니다.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="ico">📌</span>가정 및 유의사항<span class="arrow">▼</span></summary>
+      <div class="body">
+        <ul class="plain">
+          <li>공정시장가액비율은 1주택 45%, 그 외 60% 단일 가정입니다(공시 3억 이하 43%·6억 이하 44% 세부 특례는 미반영).</li>
+          <li>재산세 <b>세부담 상한</b>(전년 세액 대비 105~130%)과 <b>지역자원시설세</b>는 반영하지 않은 연간 산출액입니다.</li>
+          <li>도시지역분(0.14%)은 도시계획구역 내 주택에만 부과되며, 재산세는 7월·9월에 ½씩 분납됩니다.</li>
+          <li>다주택자의 경우 실제로는 주택별로 각각 과세되므로, 여러 주택을 합산한 금액과는 다를 수 있습니다. 이 계산기는 주택 1채 기준입니다.</li>
+        </ul>
+      </div>
+    </details>
+
+  </section>
+
+  <footer class="foot">
+    <b>근거</b> — 지방세법 제111조·제111조의2(세율), 제112조(도시지역분), 지방세법 시행령 제109조(공정시장가액비율), 지방교육세법<br>
+    본 계산기는 이해를 돕기 위한 참고용이며, 실제 세액은 지자체 부과 기준과 개별 사실관계에 따라 달라질 수 있습니다.
+  </footer>
+
+</div>
+
+<script src="assets/engine.js"></script>
+<script src="assets/property.js"></script>
